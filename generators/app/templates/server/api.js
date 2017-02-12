@@ -6,7 +6,7 @@ const Api = new Restivus({
   defaultHeaders: {
     'Content-Type': 'application/json'
   },
-  useDefaultAuth: true,
+  useDefaultAuth: false,
   prettyJson: true,
   enableCors: true
 });
@@ -17,8 +17,8 @@ Api.swagger = {
   meta: {
     swagger: '2.0',
     info: {
-      version: '<%= version %>',
-      title: '<%= title %>'
+      version: '<%= api.info.version %>',
+      title: '<%= api.info.title %>'
     }
   }
 };

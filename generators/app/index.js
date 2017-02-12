@@ -7,6 +7,7 @@ var fs = require('fs');
 var http = require('http');
 var https = require('https');
 var URL = require('url-parse');
+var sync = require('deasync');
 var SwaggerParser = require('swagger-parser');
 
 module.exports = Generator.extend({
@@ -47,36 +48,79 @@ module.exports = Generator.extend({
   },
   writing: function () {
     // Init variables
-    var done = this.async();
-    var log = this.log;
-    var swaggerURL = this.props.swaggerURL;
-    var swaggerFilePath = this.destinationPath('spec/swagger.json');
+    var generator = this;
+    var log = generator.log;
+    var swaggerURL = generator.props.swaggerURL;
+    var swaggerFilePath = generator.destinationPath('spec/swagger.json');
     var swaggerFileStream;
 
-    // Make missing folders
-    fs.mkdir('spec', function (err) {
-      if (err) {
-        log('Unable to create folder');
-        done(err);
-      } else {
-        swaggerFileStream = fs.createWriteStream(swaggerFilePath);
-        // Parse URL
-        var url = new URL(swaggerURL);
-        // Copy original spec from URL
-        if (url.protocol === 'https:') {
-          https.get(swaggerURL, function (response) {
-            response.pipe(swaggerFileStream);
-          });
-        } else if (url.protocol === 'http:') {
-          http.get(swaggerURL, function (response) {
-            response.pipe(swaggerFileStream);
-          });
-        } else {
-          log('Please provide proper URL (http/https).');
-        }
-        done();
+    try {
+      // Make spec folder
+      fs.mkdirSync('spec');
+    } catch (err) {
+      log('Folder already exists');
+    }
+    swaggerFileStream = fs.createWriteStream(swaggerFilePath);
+    // Parse URL
+    var url = new URL(swaggerURL);
+    // Copy original spec from URL
+    if (url.protocol === 'https:') {
+      sync(https.get(swaggerURL).pipe(swaggerFileStream));
+    } else if (url.protocol === 'http:') {
+      sync(http.get(swaggerURL).pipe(swaggerFileStream));
+    } else {
+      log('Please provide proper URL (http/https).');
+    }
+    // Copy files
+    generator.fs.copy(
+      generator.templatePath('.gitignore'),
+      generator.destinationPath('.gitignore')
+    );
+    fs.mkdirSync('.meteor');
+    generator.fs.copy(
+      generator.templatePath('.meteor/.finished-upgraders'),
+      generator.destinationPath('.meteor/.finished-upgraders')
+    );
+    generator.fs.copy(
+      generator.templatePath('.meteor/.gitignore'),
+      generator.destinationPath('.meteor/.gitignore')
+    );
+    generator.fs.copy(
+      generator.templatePath('.meteor/.id'),
+      generator.destinationPath('.meteor/.id')
+    );
+    generator.fs.copy(
+      generator.templatePath('.meteor/packages'),
+      generator.destinationPath('.meteor/packages')
+    );
+    generator.fs.copy(
+      generator.templatePath('.meteor/platforms'),
+      generator.destinationPath('.meteor/platforms')
+    );
+    generator.fs.copy(
+      generator.templatePath('.meteor/release'),
+      generator.destinationPath('.meteor/release')
+    );
+    // Copy templates
+    generator.fs.copyTpl(
+      generator.templatePath('package.json'),
+      generator.destinationPath('package.json'),
+      {
+        appName: generator.appname
       }
-    });
+    );
+    fs.mkdirSync('server');
+    generator.fs.copyTpl(
+      generator.templatePath('server/api.js'),
+      generator.destinationPath('server/api.js'),
+      {
+        api: generator.api
+      }
+    );
+    generator.fs.copy(
+      generator.templatePath('server/users.js'),
+      generator.destinationPath('server/users.js')
+    );
   },
   end: function () {
     this.log(yosay(

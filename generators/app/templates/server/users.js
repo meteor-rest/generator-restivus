@@ -1,5 +1,5 @@
 import {Meteor} from 'meteor/meteor';
-import Api from '/server/api';
+import Api from './api';
 
 // Enable user endpoints if authentication is enabled
 if (Api._config.useDefaultAuth) {

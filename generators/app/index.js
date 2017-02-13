@@ -117,6 +117,13 @@ module.exports = Generator.extend({
         api: generator.api
       }
     );
+    generator.fs.copyTpl(
+      generator.templatePath('server/routes.js'),
+      generator.destinationPath('server/routes.js'),
+      {
+        api: generator.api
+      }
+    );
     generator.fs.copy(
       generator.templatePath('server/users.js'),
       generator.destinationPath('server/users.js')

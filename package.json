@@ -1,12 +1,10 @@
 {
   "name": "generator-restivus",
-  "version": "0.0.0",
-  "description": "Generates Restivus from Swagger",
-  "homepage": "",
+  "version": "0.0.1",
+  "description": "Generates Restivus from Swagger spec",
   "author": {
     "name": "Alfred J. Kwak",
-    "email": "alfredjkwak@protonmail.com",
-    "url": ""
+    "email": "alfredjkwak@protonmail.com"
   },
   "files": [
     "generators"
@@ -48,7 +46,7 @@
       "mocha": true
     }
   },
-  "repository": "alfredjkwak/generator-restivus",
+  "repository": "meteor-rest/generator-restivus",
   "scripts": {
     "prepublish": "gulp prepublish",
     "test": "gulp"

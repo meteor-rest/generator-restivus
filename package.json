@@ -1,6 +1,6 @@
 {
   "name": "generator-restivus",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Generates Restivus from Swagger spec",
   "author": {
     "name": "Alfred J. Kwak",

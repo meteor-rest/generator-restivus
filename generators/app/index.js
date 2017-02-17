@@ -78,18 +78,6 @@ module.exports = Generator.extend({
     );
     fs.mkdirSync('.meteor');
     generator.fs.copy(
-      generator.templatePath('.meteor/.finished-upgraders'),
-      generator.destinationPath('.meteor/.finished-upgraders')
-    );
-    generator.fs.copy(
-      generator.templatePath('.meteor/.gitignore'),
-      generator.destinationPath('.meteor/.gitignore')
-    );
-    generator.fs.copy(
-      generator.templatePath('.meteor/.id'),
-      generator.destinationPath('.meteor/.id')
-    );
-    generator.fs.copy(
       generator.templatePath('.meteor/packages'),
       generator.destinationPath('.meteor/packages')
     );
@@ -124,6 +112,15 @@ module.exports = Generator.extend({
         api: generator.api
       }
     );
+    if (generator.api.definitions) {
+      generator.fs.copyTpl(
+        generator.templatePath('server/definitions.js'),
+        generator.destinationPath('server/definitions.js'),
+        {
+          api: generator.api
+        }
+      );
+    }
     generator.fs.copy(
       generator.templatePath('server/users.js'),
       generator.destinationPath('server/users.js')

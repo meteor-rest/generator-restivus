@@ -1,4 +1,4 @@
-import {Restivus} from 'meteor/ajkwak:restivus';
+import {Restivus} from 'meteor/mrest:restivus';
 
 const Api = new Restivus({
   apiPath: 'api',

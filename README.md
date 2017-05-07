@@ -1,4 +1,4 @@
-# generator-restivus [![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url]
+# generator-restivus [![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Gitter Chat](http://img.shields.io/badge/chat-online-brightgreen.svg)](https://gitter.im/meteor-rest/generator-restivus)
 > Generates Restivus API from Swagger spec
 
 ## Installation
